@@ -18,8 +18,6 @@ divider() {
     printf "${reset_color}"
 }
 
-
-
 # Function to delete a directory and show status
 delete_directory() {
     local directory="$1"
@@ -43,6 +41,7 @@ clone_repo() {
         echo -e "${GREEN}Repository cloned successfully to $destination.${NC}\n"
     else
         echo -e "${RED}Failed to clone repository to $destination.${NC}\n"
+        return 1
     fi
 }
 
