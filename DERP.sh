@@ -86,10 +86,10 @@ clone_repo "https://gitlab.pixelexperience.org/android/vendor-blobs/vendor_xiaom
 clone_repo "https://gitlab.pixelexperience.org/android/vendor-blobs/vendor_xiaomi_sm6225-common-miuicamera.git" "thirteen" "vendor/xiaomi/sm6225-common-miuicamera"
 
 # Packages repositories
-git clone -b tokui https://github.com/P-404/android_packages_apps_Dialer.git" "tokui" "packages/apps/Dialer"
-git clone -b tokui https://github.com/P-404/android_packages_apps_Contacts.git" "tokui" "packages/apps/Contacts"
-git clone -b tokui https://github.com/P-404/android_packages_apps_Messaging.git" "tokui" "packages/apps/Messaging"
-git clone -b thirteen https://github.com/PixelExperience/packages_resources_devicesettings.git" "thirteen" "packages/resources/devicesettings"
+clone_repo "https://github.com/P-404/android_packages_apps_Dialer.git" "tokui" "packages/apps/Dialer"
+clone_repo "https://github.com/P-404/android_packages_apps_Contacts.git" "tokui" "packages/apps/Contacts"
+clone_repo "https://github.com/P-404/android_packages_apps_Messaging.git" "tokui" "packages/apps/Messaging"
+clone_repo "https://github.com/PixelExperience/packages_resources_devicesettings.git" "thirteen" "packages/resources/devicesettings"
 
 # Hardware repositories
 clone_repo "https://github.com/PixelExperience/hardware_st_nfc.git" "thirteen" "hardware/st/nfc"
