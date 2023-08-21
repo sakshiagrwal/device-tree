@@ -40,9 +40,9 @@ clone_repo() {
 
     echo -e "${YELLOW}Cloning $destination...${NC}"
     if git clone -b "$branch" "$repo_url" "$destination"; then
-        echo -e "${GREEN}Repository cloned successfully to $destination.${NC}"
+        echo -e "${GREEN}Repository cloned successfully to $destination.${NC}\n"
     else
-        echo -e "${RED}Failed to clone repository to $destination.${NC}"
+        echo -e "${RED}Failed to clone repository to $destination.${NC}\n"
     fi
 }
 
@@ -57,27 +57,23 @@ apply_patch() {
     pushd "$directory"
     git fetch "$repo_url" "$branch"
     if git cherry-pick "$commit_hash"; then
-        echo -e "${GREEN}Patches applied successfully to $directory.${NC}"
+        echo -e "${GREEN}Patches applied successfully to $directory.${NC}\n"
     else
-        echo -e "${RED}Failed to apply patches to $directory.${NC}"
+        echo -e "${RED}Failed to apply patches to $directory.${NC}\n"
     fi
     popd
 }
 
-# Main script
-
-divider
-
 # Remove unwanted directories and show status
+divider
 delete_directory "hardware/st/nfc"
 delete_directory "packages/apps/Dialer"
 delete_directory "packages/apps/Contacts"
 delete_directory "packages/apps/Messaging"
 delete_directory "packages/resources/devicesettings"
 
-divider
-
 # Device repositories
+divider
 clone_repo "https://github.com/sakshiagrwal/device_xiaomi_spes.git" "thirteen" "device/xiaomi/spes"
 clone_repo "https://github.com/sakshiagrwal/device_xiaomi_sm6225-common.git" "thirteen" "device/xiaomi/sm6225-common"
 clone_repo "https://github.com/PixelExperience-Devices/device_xiaomi_sm6225-common-miuicamera.git" "thirteen" "device/xiaomi/sm6225-common-miuicamera"
@@ -117,8 +113,7 @@ clone_repo "https://github.com/PixelExperience/vendor_qcom_opensource_core-utils
 clone_repo "https://github.com/PixelExperience/vendor_qcom_opensource_commonsys_dpm.git" "thirteen" "vendor/qcom/opensource/commonsys/dpm"
 clone_repo "https://github.com/PixelExperience/vendor_qcom_opensource_commonsys-intf_bluetooth.git" "thirteen" "vendor/qcom/opensource/commonsys-intf/bluetooth"
 
-divider
-
 # Applying patches
+divider
 apply_patch "device/qcom/common" "https://github.com/parixxshit/device_qcom_common.git" "13" "feb9d85"
 apply_patch "device/qcom/common-sepolicy" "https://github.com/parixxshit/device_qcom_common-sepolicy.git" "13" "1a7aa02"
