@@ -32,14 +32,18 @@ delete_directory() {
     fi
 }
 
-# Function to clone repositories
+# Function to clone a repository
 clone_repo() {
     local repo_url="$1"
     local branch="$2"
     local destination="$3"
 
     echo -e "${YELLOW}Cloning $destination...${NC}"
-    git clone -b "$branch" "$repo_url" "$destination"
+    if git clone -b "$branch" "$repo_url" "$destination"; then
+        echo -e "${GREEN}Repository cloned successfully to $destination.${NC}"
+    else
+        echo -e "${RED}Failed to clone repository to $destination.${NC}"
+    fi
 }
 
 # Function to apply patches
