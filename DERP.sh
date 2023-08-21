@@ -95,7 +95,7 @@ clone_repo "https://github.com/PixelExperience/packages_resources_devicesettings
 clone_repo "https://github.com/PixelExperience/hardware_st_nfc.git" "thirteen" "hardware/st/nfc"
 clone_repo "https://github.com/PixelExperience/hardware_xiaomi.git" "thirteen" "hardware/xiaomi"
 
-clone_repo "https://github.com/PixelExperience/hardware_qcom-caf_bengal_gps.git " "thirteen" "hardware/qcom-caf/bengal/gps"
+clone_repo "https://github.com/PixelExperience/hardware_qcom-caf_bengal_gps.git" "thirteen" "hardware/qcom-caf/bengal/gps"
 clone_repo "https://github.com/PixelExperience/hardware_qcom-caf_bengal_media.git" "thirteen" "hardware/qcom-caf/bengal/media"
 clone_repo "https://github.com/PixelExperience/hardware_qcom-caf_bengal_audio.git" "thirteen" "hardware/qcom-caf/bengal/audio"
 clone_repo "https://github.com/PixelExperience/hardware_qcom-caf_bengal_display.git" "thirteen" "hardware/qcom-caf/bengal/display"
