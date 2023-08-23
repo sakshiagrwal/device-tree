@@ -4,7 +4,7 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-NC='\033[0m'
+NC='\033[0m' # No Color
 
 # Function to display section dividers
 divider() {
@@ -46,21 +46,26 @@ clone_repo() {
 }
 
 # Function to apply patches
-apply_patch() {
+apply_patches() {
     local directory="$1"
     local repo_url="$2"
     local branch="$3"
-    local commit_hash="$4"
+    local commit_hashes=("${@:4}")  # Collect all commit hashes into an array
 
     echo -e "${YELLOW}Applying patches to $directory...${NC}"
     pushd "$directory"
     git fetch "$repo_url" "$branch"
-    if git cherry-pick "$commit_hash"; then
-        echo -e "${GREEN}Patches applied successfully to $directory.${NC}\n"
-    else
-        echo -e "${RED}Failed to apply patches to $directory.${NC}\n"
-    fi
+
+    for commit_hash in "${commit_hashes[@]}"; do
+        if git cherry-pick "$commit_hash"; then
+            echo -e "${GREEN}Patch with commit hash $commit_hash applied successfully to $directory.${NC}\n"
+        else
+            echo -e "${RED}Failed to apply patch with commit hash $commit_hash to $directory.${NC}\n"
+        fi
+    done
+
     popd
+    echo -e "${GREEN}Patches applied successfully to $directory.${NC}\n"
 }
 
 # Remove unwanted directories and show status
@@ -114,5 +119,9 @@ clone_repo "https://github.com/PixelExperience/vendor_qcom_opensource_commonsys-
 
 # Applying patches
 divider
-apply_patch "device/qcom/common" "https://github.com/parixxshit/device_qcom_common.git" "13" "feb9d85"
-apply_patch "device/qcom/common-sepolicy" "https://github.com/parixxshit/device_qcom_common-sepolicy.git" "13" "1a7aa02"
+apply_patches "frameworks/base" "https://github.com/parixxshit/device_qcom_common.git" "13" "8b318b0" "50ab912"
+apply_patches "device/qcom/common" "https://github.com/parixxshit/device_qcom_common.git" "13" "feb9d85"
+apply_patches "device/qcom/common-sepolicy" "https://github.com/parixxshit/device_qcom_common-sepolicy.git" "13" "e4c9045"
+apply_patches "packages/apps/Settings" "https://github.com/parixxshit/packages_apps_Settings.git" "13" "0631144" "be06b4e"
+apply_patches "vendor/derp" "https://github.com/parixxshit/vendor_derp.git" "13" "01370e0" "33d01f6"
+apply_patches "vendor/qcom/opensource/fm-commonsys" "https://github.com/PixelExperience/vendor_qcom_opensource_fm-commonsys.git" "13" "74f4211"
