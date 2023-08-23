@@ -36,13 +36,22 @@ clone_repo() {
     local branch="$2"
     local destination="$3"
 
-    echo -e "${YELLOW}Cloning $destination...${NC}"
+    echo -e "${YELLOW}Cloning $repo_url...${NC}"
     if git clone -b "$branch" "$repo_url" "$destination"; then
         echo -e "${GREEN}Repository cloned successfully to $destination.${NC}\n"
     else
         echo -e "${RED}Failed to clone repository to $destination.${NC}\n"
         return 1
     fi
+}
+
+# Function to get commit name
+get_commit_name() {
+    local repo_url="$1"
+    local commit_hash="$2"
+
+    local commit_name=$(git log -1 --format="%s" "$commit_hash")
+    echo "$commit_name"
 }
 
 # Function to apply patches
@@ -57,10 +66,11 @@ apply_patches() {
     git fetch "$repo_url" "$branch"
 
     for commit_hash in "${commit_hashes[@]}"; do
+        commit_name=$(get_commit_name "$repo_url" "$commit_hash")
         if git cherry-pick "$commit_hash"; then
-            echo -e "${GREEN}Patch with commit hash $commit_hash applied successfully to $directory.${NC}\n"
+            echo -e "${GREEN}Patch with commit '$commit_name' applied successfully to $directory.${NC}\n"
         else
-            echo -e "${RED}Failed to apply patch with commit hash $commit_hash to $directory.${NC}\n"
+            echo -e "${RED}Failed to apply patch with commit '$commit_name' to $directory.${NC}\n"
         fi
     done
 
@@ -119,7 +129,7 @@ clone_repo "https://github.com/PixelExperience/vendor_qcom_opensource_commonsys-
 
 # Applying patches
 divider
-apply_patches "frameworks/base" "https://github.com/parixxshit/device_qcom_common.git" "13" "8b318b0" "50ab912"
+apply_patches "frameworks/base" "https://github.com/parixxshit/frameworks_base.git" "13" "8b318b0" "50ab912"
 apply_patches "device/qcom/common" "https://github.com/parixxshit/device_qcom_common.git" "13" "feb9d85"
 apply_patches "device/qcom/common-sepolicy" "https://github.com/parixxshit/device_qcom_common-sepolicy.git" "13" "e4c9045"
 apply_patches "packages/apps/Settings" "https://github.com/parixxshit/packages_apps_Settings.git" "13" "0631144" "be06b4e"
