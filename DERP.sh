@@ -37,7 +37,7 @@ clone_repo() {
     local destination="$3"
 
     echo -e "${YELLOW}Cloning $repo_url...${NC}"
-    if git clone -b "$branch" "$repo_url" "$destination"; then
+    if git clone --depth 1 -b "$branch" "$repo_url" "$destination"; then
         echo -e "${GREEN}Repository cloned successfully to $destination.${NC}\n"
     else
         echo -e "${RED}Failed to clone repository to $destination.${NC}\n"
