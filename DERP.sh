@@ -6,19 +6,11 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Function to display section dividers
-divider() {
-    local divider_char="-"
-    local divider_length=80
-    local divider_color="${GREEN}"
-    local reset_color="${NC}"
+# Dividers
+HEAVY_S=$(printf '━%.0s' {1..100})
+LIGHT_S=$(printf '─%.0s' {1..100})
 
-    printf "${divider_color}"
-    printf "%${divider_length}s\n" | tr ' ' "$divider_char"
-    printf "${reset_color}"
-}
-
-# Function to delete a directory and show status
+# Function to delete a directory
 delete_directory() {
     local directory="$1"
 
@@ -37,6 +29,7 @@ clone_repo() {
     local destination="$3"
 
     echo -e "${YELLOW}Cloning $repo_url...${NC}"
+
     if git clone --depth 1 -b "$branch" "$repo_url" "$destination"; then
         echo -e "${GREEN}Repository cloned successfully to $destination.${NC}\n"
     else
@@ -62,24 +55,25 @@ apply_patches() {
     local commit_hashes=("${@:4}")  # Collect all commit hashes into an array
 
     echo -e "${YELLOW}Applying patches to $directory...${NC}"
-    pushd "$directory"
-    git fetch "$repo_url" "$branch"
 
-    for commit_hash in "${commit_hashes[@]}"; do
-        commit_name=$(get_commit_name "$repo_url" "$commit_hash")
-        if git cherry-pick "$commit_hash"; then
-            echo -e "${GREEN}Patch with commit '$commit_name' applied successfully to $directory.${NC}\n"
-        else
-            echo -e "${RED}Failed to apply patch with commit '$commit_name' to $directory.${NC}\n"
-        fi
-    done
-
-    popd
-    echo -e "${GREEN}Patches applied successfully to $directory.${NC}\n"
+    if pushd "$directory"; then
+        git fetch "$repo_url" "$branch"
+        for commit_hash in "${commit_hashes[@]}"; do
+            commit_name=$(get_commit_name "$repo_url" "$commit_hash")
+            if git cherry-pick "$commit_hash"; then
+                echo -e "${GREEN}Patch with commit '$commit_name' applied successfully to $directory.${NC}\n"
+            else
+                echo -e "${RED}Failed to apply patch with commit '$commit_name' to $directory.${NC}\n"
+            fi
+        done
+        popd
+    else
+        echo -e "${RED}Directory $directory does not exist. Skipping apply patch.${NC}\n"
+    fi
 }
 
 # Remove repositories
-divider
+echo -e "${GREEN}${HEAVY_S}${NC}"
 delete_directory "hardware/st/nfc"
 delete_directory "packages/apps/Dialer"
 delete_directory "packages/apps/Contacts"
@@ -87,7 +81,7 @@ delete_directory "packages/apps/Messaging"
 delete_directory "packages/resources/devicesettings"
 
 # Clone repositories
-divider
+echo -e "\n${GREEN}${HEAVY_S}${NC}"
 clone_repo "https://github.com/sakshiagrwal/device_xiaomi_spes.git" "thirteen" "device/xiaomi/spes"
 clone_repo "https://github.com/sakshiagrwal/device_xiaomi_sm6225-common.git" "thirteen" "device/xiaomi/sm6225-common"
 clone_repo "https://github.com/PixelExperience-Devices/device_xiaomi_sm6225-common-miuicamera.git" "thirteen" "device/xiaomi/sm6225-common-miuicamera"
@@ -117,7 +111,7 @@ clone_repo "https://github.com/PixelExperience/vendor_qcom_opensource_commonsys_
 clone_repo "https://github.com/PixelExperience/vendor_qcom_opensource_commonsys-intf_bluetooth.git" "thirteen" "vendor/qcom/opensource/commonsys-intf/bluetooth"
 
 # Applying patches
-divider
+echo -e "\n${GREEN}${HEAVY_S}${NC}"
 apply_patches "frameworks/base" "https://github.com/parixxshit/frameworks_base.git" "13" "8b318b0" "50ab912"
 apply_patches "vendor/pixel-framework" "https://github.com/parixxshit/vendor_pixel-framework.git" "13" "cbafd53"
 apply_patches "device/qcom/common" "https://github.com/parixxshit/device_qcom_common.git" "13" "feb9d85" "7909a81"
