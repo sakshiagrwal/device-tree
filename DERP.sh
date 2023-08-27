@@ -56,17 +56,17 @@ apply_patches() {
 
     echo -e "${YELLOW}Applying patches to $directory...${NC}"
 
-    if pushd "$directory"; then
-        git fetch "$repo_url" "$branch"
+    if pushd "$directory" > /dev/null 2>&1; then
+        git fetch "$repo_url" "$branch" > /dev/null 2>&1
         for commit_hash in "${commit_hashes[@]}"; do
             commit_name=$(get_commit_name "$repo_url" "$commit_hash")
-            if git cherry-pick "$commit_hash"; then
+            if git cherry-pick "$commit_hash" > /dev/null 2>&1; then
                 echo -e "${GREEN}Patch with commit '$commit_name' applied successfully to $directory.${NC}\n"
             else
                 echo -e "${RED}Failed to apply patch with commit '$commit_name' to $directory.${NC}\n"
             fi
         done
-        popd
+        popd > /dev/null 2>&1
     else
         echo -e "${RED}Directory $directory does not exist. Skipping apply patch.${NC}\n"
     fi
