@@ -6,6 +6,8 @@
 
 #include <libinit_dalvik_heap.h>
 #include <libinit_variant.h>
+#include <libinit_utils.h>
+#include <libinit_lmk.h>
 
 #include "vendor_init.h"
 
@@ -15,8 +17,9 @@ static const variant_info_t spes_info = {
 
     .brand = "Redmi",
     .device = "spes",
-    .marketname = "Redmi Note 11",
     .model = "2201117TG",
+    .marketname = "Redmi Note 11",
+    .build_fingerprint = "Redmi/spes/spes:13/TKQ1.221114.001/V14.0.2.0.TGCMIXM:user/release-keys",
 
     .nfc = false,
 };
@@ -27,8 +30,9 @@ static const variant_info_t spes_in_info = {
 
     .brand = "Redmi",
     .device = "spes",
-    .marketname = "Redmi Note 11",
     .model = "2201117TI",
+    .marketname = "Redmi Note 11",
+    .build_fingerprint = "Redmi/spes/spes:13/TKQ1.221114.001/V14.0.2.0.TGCMIXM:user/release-keys",
 
     .nfc = false,
 };
@@ -39,8 +43,9 @@ static const variant_info_t spesn_info = {
 
     .brand = "Redmi",
     .device = "spesn",
-    .marketname = "Redmi Note 11",
     .model = "2201117TY",
+    .marketname = "Redmi Note 11 NFC",
+    .build_fingerprint = "Redmi/spes/spes:13/TKQ1.221114.001/V14.0.2.0.TGKMIXM:user/release-keys",
 
     .nfc = true,
 };
@@ -54,4 +59,12 @@ static const std::vector<variant_info_t> variants = {
 void vendor_load_properties() {
     search_variant(variants);
     set_dalvik_heap();
+    set_lmk();
+
+    // SafetyNet workaround
+    property_override("ro.boot.verifiedbootstate", "green");
+    property_override("ro.oem_unlock_supported", "0");
+
+    // LMKD Tunning
+
 }
